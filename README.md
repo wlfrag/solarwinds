@@ -1,6 +1,31 @@
 **DGA Logic for b91ce2fa41029f6955bff20079468448**
 
 
+
+**[Usage]**
+
+```solarwinds.exe <encrypt|decrypt> <domain>```
+
+**Encrypt**
+
+![image](https://github.com/user-attachments/assets/498650a6-f038-4b2e-bbab-95df79d83e05)
+
+**Decrypt**
+
+![image](https://github.com/user-attachments/assets/a4467477-6a8f-4fe6-af81-bf37b899c99d)
+
+
+
+
+
+
+
+
+
+------------------------------------------------
+**Details**
+
+
 ![image](https://github.com/user-attachments/assets/6ea358d2-4bbc-4c40-aaac-a11ab55b8fd5)
 
 With a domain name, calls GetOrCreateUserId()
@@ -22,10 +47,7 @@ With a UserID and domain name, calls GetPreviousString():
 - extract dnssubstring if .dnStr is too long
 - returns both values above + GetStatus() -> .appsync-api.eu-west-1.avsvmcloud.com
 
-**Decoder using SunburstDomainDecoder.exe:**
-Would have built a decoder, but someone else already did.
-https://www.netresec.com/?page=Blog&month=2020-12&post=Reassembling-Victim-Domain-Fragments-from-SUNBURST-DNS
-![image](https://github.com/user-attachments/assets/b5be55b4-d740-4ce8-bfa5-9566a32e788b)
+
 
 
 **Complete 1-1 function port from malicious .dll**
